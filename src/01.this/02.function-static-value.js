@@ -33,4 +33,5 @@ function example2() {
   console.log(myContext.totalExecutedTimes);
 }
 
-example2();
+// example1();
+// example2();

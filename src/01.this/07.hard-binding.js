@@ -1,3 +1,7 @@
+/**
+ * When we use a function that wraps an explicit binding so we cannot override it anymore.
+ */
+
 function hardBinding() {
   function foo() {
     console.log(this.a);
@@ -34,7 +38,7 @@ function hardBinding2() {
   console.log(b); // 5
 }
 
-function bindHelper() {
+function bindHelperExample() {
   function bind(fn, obj) {
     return function () {
       return fn.apply(obj, arguments);
@@ -53,7 +57,7 @@ function bindHelper() {
   bar(); // 2
 }
 
-function prototypeBindExample() {
+function functionPrototypeBindExample() {
   function foo(something) {
     return this.a + something;
   }
@@ -66,7 +70,7 @@ function prototypeBindExample() {
   console.log(bar(3)); // 5
 }
 
-function callContext() {
+function callContextForEachExample() {
   function foo(el) {
     console.log(el, this.id);
   }
@@ -78,3 +82,9 @@ function callContext() {
   [1, 2, 3].forEach(foo, obj); // 1 awesome 2 awesome 3 awesome
   [1, 2, 3].forEach(foo.bind(obj)); // 1 awesome 2 awesome 3 awesome
 }
+
+// hardBinding();
+// hardBinding2();
+// bindHelperExample();
+// functionPrototypeBindExample();
+// callContextForEachExample();

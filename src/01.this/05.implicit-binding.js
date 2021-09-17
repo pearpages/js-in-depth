@@ -1,3 +1,7 @@
+/**
+ * Implicit binding is when the function is contained in an object. Being the context object this one.
+ */
+
 function implicitBinding() {
   function foo() {
     console.log(this.a);
@@ -45,6 +49,8 @@ function exampleOfWrongImplicitBinding() {
 
   const bar = obj.foo;
   bar(); // "oops global"
+
+  obj.foo(); // 2
 }
 
 function exampleOfWrongImplicitBinding2() {
@@ -61,3 +67,8 @@ function exampleOfWrongImplicitBinding2() {
 
   setTimeout(obj.foo, 0); // undefined
 }
+
+// implicitBinding();
+// implicitBinding2();
+// exampleOfWrongImplicitBinding();
+// exampleOfWrongImplicitBinding2();

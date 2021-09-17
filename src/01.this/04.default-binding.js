@@ -1,3 +1,8 @@
+/**
+ * The default binding goes to global or window
+ * with 'use strict' throws an Error
+ */
+
 function callStackExample() {
   function baz() {
     console.log('baz');
@@ -40,4 +45,6 @@ function defaultBindingWithStrictMode() {
   delete a; // error with 'use strict'
 }
 
-defaultBinding();
+// callStackExample();
+// defaultBinding();
+// defaultBindingWithStrictMode();

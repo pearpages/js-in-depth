@@ -1,7 +1,8 @@
-// apply array
-// call arguments
+/**
+ * Explicit binding is when we use 'apply' (array) and 'call' (arguments)
+ */
 
-function example1() {
+function explicitBinding() {
   function foo() {
     console.log(this.a);
   }
@@ -15,4 +16,4 @@ function example1() {
   foo(); // undefined
 }
 
-example1();
+explicitBinding();

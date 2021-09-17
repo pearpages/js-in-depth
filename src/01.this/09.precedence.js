@@ -50,3 +50,8 @@ function newBindingTakesPrecedenceOverImplicitBinding() {
     console.log(obj1.a); // 2;
     console.log(bar.a); // 4;
 }
+
+// explicitBindingTakesPrecedenceOverImplicitBinding();
+// newBindingTakesPrecedenceOverImplicitBinding();
+
+// TODO: add example with new binding being the stronger taking precedence to hard binding even

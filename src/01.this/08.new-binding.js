@@ -3,21 +3,27 @@
 /**
 1. A brand new object is created (aka constructed) out of thin air.
 2. The newly constructed object is [[Prototype]]-linked.
-3. The newly constructed object is set as the **this** binding for that function call.
+3. The newly constructed object is set as the **this** binding for that function call (construction call).
 4. Unless the function returns its own alternate objet, the new-invoked function call will automatically return the newly constructed object.
  */
 
 function exampleWithNew() {
-  function Foo(a) {
-    this.a = a;
-    console.log("hello");
+  function factory(a) {
+    function Foo(a) {
+      this.a = a;
+      // return this; // 4. implicit return the object
+    }
+    Foo.prototype.getA = function () {
+      return this.a;
+    };
+    return new Foo(a);
   }
 
-  const x = new Foo(3); // 'hello' // 1. 2. 3. 4.
-  console.log(x.a); // 3
+  const obj = factory(4);
+  console.log(obj.getA()); // 4
 }
 
-function exampleWithoutNew() {
+function factoryWithoutNewButWithConstructor() {
   function factory(a) {
     function constructor(a) {
       this.a = a;
@@ -29,17 +35,41 @@ function exampleWithoutNew() {
         return this.a;
       },
     };
-    // alternate: 1. and 2.
-    // const context = {}; // 1. A brand new object is created // 2. The newly constructed object is [[Prototype]]-linked to Object
-    // Object.setPrototypeOf(context, prototype); // 2. but now we link it to our new prototype
 
     const context = Object.create(prototype); // 1. and 2.
-    // context.prototype.constructor = constructor ???
-    const Foo = constructor.bind(context); // 3. The newly constructed object is set as the **this** binding for that function call
-    return Foo(a); // 4. return the object
+    const bindConstructor = constructor.bind(context); // 3. The newly constructed object is set as the **this** binding for that function call
+    return bindConstructor(a); // 4. return the object
   }
 
-  function factory2(a) {
+  const obj = factory(4);
+  console.log(obj.getA()); // 4
+}
+
+function factoryWithoutNewButWithConstructor2() {
+  function factory(a) {
+    function constructor(a) {
+      this.a = a;
+      return this; // 4. return the object
+    }
+
+    const prototype = {
+      getA: function () {
+        return this.a;
+      },
+    };
+
+    const context = {}; // 1. A brand new object is created // 2. The newly constructed object is [[Prototype]]-linked to Object
+    Object.setPrototypeOf(context, prototype); // 2. but now we link it to our new prototype
+    const bindConstructor = constructor.bind(context); // 3. The newly constructed object is set as the **this** binding for that function call
+    return bindConstructor(a); // 4. return the object
+  }
+
+  const obj = factory(3);
+  console.log(obj.getA()); // 3
+}
+
+function factoryWithoutNewAndWithoutConstructor() {
+  function factory(a) {
     const prototype = {
       getA: function () {
         return this.a;
@@ -48,27 +78,44 @@ function exampleWithoutNew() {
     const object = Object.create(prototype); // 1. 2. 3.
     object.a = a; // the equivalent of the constructor function
     // object.prototype.constructor must be Object now
-    return a; // 4.
+    return object; // 4.
   }
 
-  function factoryUsingNew(a) {
-      function Foo(a) {
-        this.a = a;
-        // return this; // 4. implicit return the object
-      }
-      foo.prototype.getA = function () {
-        return this.a;
-      };
-      return new Foo(a);
-
-  }
-
-  const myObj = factory(2);
-  const myObj2 = factory(42);
-  console.log(myObj2.a); // 42
-  console.log(myObj2.getA()); // 42
-  console.log(myObj.a); // 2
-  console.log(myObj.getA()); // 2
+  const obj = factory(42);
+  console.log(obj.getA()); // 42
 }
 
-exampleWithoutNew();
+function factoryUsingOLOO() {
+  function factory(firstName, lastName) {
+    const objTemplate = {
+      init: function (firstName, lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        return this;
+      },
+      getFirstName() {
+        return this.firstName;
+      },
+    };
+
+    // we Delegate to the objTemplate
+    const obj = Object.create(objTemplate).init(firstName, lastName);
+    // we add behavior tih getLastName and getFullName
+    obj.getLastName = function () {
+      return this.lastName;
+    };
+    obj.getFullName = function () {
+      return this.getFirstName() + ' ' +  this.getLastName();
+    }
+    return obj;
+  }
+
+  const obj = factory("Pere", "Pages");
+  console.log(obj.getFullName()); // 'Pere Pages'
+}
+
+// exampleWithNew();
+// factoryWithoutNewButWithConstructor();
+// factoryWithoutNewButWithConstructor2();
+// factoryWithoutNewAndWithoutConstructor();
+// factoryUsingOLOO();
