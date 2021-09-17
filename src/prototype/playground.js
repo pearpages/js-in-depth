@@ -11,7 +11,7 @@ function getObjectOwnProperties(ob) {
   return Object.keys(ob);
 }
 
-function getAllThePropertiesIncludingChained(ob) {
+function getAllThePropertiesIncludingChainedUsingIn(ob) {
   const res = [];
   for (let key in ob) {
     // iterable
